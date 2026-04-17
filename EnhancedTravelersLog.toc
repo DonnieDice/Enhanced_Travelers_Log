@@ -1,0 +1,18 @@
+## Interface: 120001
+## Version: 0.1.0
+## Title: |cff950041E|r|cffffffffnhanced |r|cff950041T|r|cffffffffraveler's |r|cff950041L|r|cffffffffog|r
+## Notes: Adds progress bars and a minimap launcher to the Traveler's Log. |n|r    |cff950041By DonnieDice US-BleedingHollow|r
+## Author: DonnieDice
+## IconTexture: Interface\AddOns\EnhancedTravelersLog\images\icon.tga
+## SavedVariables: ETLDB
+## DefaultState: Enabled
+## LoadOnDemand: 0
+
+## X-Category: UI Media, Questing & Leveling, Miscellaneous
+## X-Website: https://github.com/DonnieDice/EnhancedTravelersLog
+## X-Curse-Project-ID: 
+## X-Wago-ID: vNAekjNo
+## X-WoWI-ID: 26643
+
+core.lua
+minimap.lua
