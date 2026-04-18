@@ -1,9 +1,9 @@
 ## Interface: 120001
-## Version: 0.1.0
+## Version: 0.1.1
 ## Title: |cff950041E|r|cffffffffnhanced |r|cff950041T|r|cffffffffraveler's |r|cff950041L|r|cffffffffog|r
 ## Notes: Adds progress bars and a minimap launcher to the Traveler's Log. |n|r    |cff950041By DonnieDice US-BleedingHollow|r
 ## Author: DonnieDice
-## IconTexture: Interface\AddOns\EnhancedTravelersLog\images\icon.tga
+## IconTexture: Interface\AddOns\EnhancedTravelersLog\media\logo
 ## SavedVariables: ETLDB
 ## DefaultState: Enabled
 ## LoadOnDemand: 0
@@ -14,5 +14,10 @@
 ## X-Wago-ID: vNAekjNo
 ## X-WoWI-ID: 26643
 
-core.lua
-minimap.lua
+data/core.lua
+data/settings.lua
+data/activities.lua
+data/bars.lua
+data/commands.lua
+data/hooks.lua
+data/minimap.lua
