@@ -1,5 +1,5 @@
 ## Interface: 120005
-## Version: 0.1.2
+## Version: 0.1.4
 ## Title: |cff950041E|r|cffffffffnhanced |r|cff950041T|r|cffffffffraveler's |r|cff950041L|r|cffffffffog|r
 ## Notes: Adds progress bars and a minimap launcher to the Traveler's Log. |n|r    |cff950041By DonnieDice US-BleedingHollow|r
 ## Author: DonnieDice

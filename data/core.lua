@@ -22,7 +22,7 @@ local private = ETL.Private
 
 private.ADDON_NAME = ADDON_NAME
 private.LEGACY_ADDON_NAME = LEGACY_ADDON_NAME
-private.VERSION = "v0.1.1"
+private.VERSION = "v0.1.4"
 
 private.BAR_COLOR_R = 0.737
 private.BAR_COLOR_G = 0.435
@@ -45,7 +45,7 @@ private.DEFAULTS = {
             g = private.BAR_COLOR_G,
             b = private.BAR_COLOR_B,
         },
-        hideCompleted = true,
+        hideCompleted = false,
         parentBarHeight = 7,
         childBarHeight = 6,
         parentBottomInset = 8,

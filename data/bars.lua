@@ -37,6 +37,39 @@ function ETL:ReserveProgressBarSpace(button, data)
     return
 end
 
+-- Candidate field names for the Blizzard-native requirement/progress text on
+-- MonthlyActivitiesButton. ETL hides this when showing its own bar so the two
+-- don't stack on top of each other (causing the "broken font" overlap).
+local NATIVE_TEXT_FIELDS = {
+    "RequirementText", "ProgressText", "StatusText",
+    "RequirementsText", "ActivityText", "DescriptionText",
+}
+
+function ETL:FindNativeRequirementText(button)
+    if button.ETL_NativeReqText ~= nil then
+        return button.ETL_NativeReqText or nil
+    end
+    for _, field in ipairs(NATIVE_TEXT_FIELDS) do
+        local candidate = button[field]
+        if candidate and type(candidate) == "table" and candidate.GetText then
+            button.ETL_NativeReqText = candidate
+            return candidate
+        end
+    end
+    button.ETL_NativeReqText = false
+    return nil
+end
+
+function ETL:SetNativeRequirementTextVisible(button, visible)
+    local native = self:FindNativeRequirementText(button)
+    if not native then return end
+    if visible then
+        if native.Show then native:Show() end
+    else
+        if native.Hide then native:Hide() end
+    end
+end
+
 function ETL:EnsureProgressWidgets(button)
     if button.ETL_ProgressBarBg and button.ETL_ProgressBar and button.ETL_ProgressTextFrame and button.ETL_ProgressBarText then
         return
@@ -101,6 +134,9 @@ function ETL:EnsureProgressWidgets(button)
         text:SetShadowColor(0, 0, 0, 0.9)
     end
     button.ETL_ProgressBarText = text
+
+    -- Start hidden; UpdateProgressBar decides visibility.
+    self:HideProgressBar(button)
 end
 
 function ETL:HideProgressBar(button)
@@ -116,6 +152,7 @@ function ETL:HideProgressBar(button)
     if button and button.ETL_ProgressBarText then
         button.ETL_ProgressBarText:Hide()
     end
+    self:SetNativeRequirementTextVisible(button, true)
     self:ResetRowLayout(button)
 end
 
@@ -202,12 +239,21 @@ function ETL:UpdateProgressBar(button)
     local current, total, label = self:BuildProgress(data and data.requirementsList)
 
     if not current or not total or total <= 0 then
-        self:HideProgressBar(button)
-        return
+        -- Completed activities often have no requirementsList left in the API.
+        -- Show a full bar instead of hiding so the row still has a visual.
+        if data and data.completed then
+            current, total, label = 1, 1, "Complete"
+        else
+            self:HideProgressBar(button)
+            return
+        end
     end
 
-    if data and data.completed and current < total then
+    if data and data.completed then
         current = total
+        if not label or label == "" then
+            label = "Complete"
+        end
     end
 
     do
@@ -216,6 +262,7 @@ function ETL:UpdateProgressBar(button)
     end
 
     local shown = math.min(current, total)
+    self:SetNativeRequirementTextVisible(button, false)
     self:ShowThing(button.ETL_ProgressBarBg)
     self:ShowThing(button.ETL_ProgressBar)
     self:ShowThing(button.ETL_ProgressTextFrame)
