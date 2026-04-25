@@ -1,33 +1,37 @@
-local private = ETL.Private
+local private = {}
 
-local function EnsureTable(target, defaults)
-    return ETL:Remember(target, defaults)
+local function DeepDefaults(target, defaults)
+    for key, value in pairs(defaults) do
+        if type(value) == "table" then
+            target[key] = DeepDefaults(target[key] or {}, value)
+        elseif target[key] == nil then
+            target[key] = value
+        end
+    end
+    return target
 end
 
 local function MigrateCoreSettings(core)
-    if type(core) ~= "table" then
-        return core
-    end
-
+    if type(core) ~= "table" then return core end
     local version = tonumber(core.layoutVersion) or 0
     if version < 5 then
-        core.parentBarHeight = private.DEFAULTS.core.parentBarHeight
-        core.childBarHeight = private.DEFAULTS.core.childBarHeight
-        core.parentBottomInset = private.DEFAULTS.core.parentBottomInset
-        core.childBottomInset = private.DEFAULTS.core.childBottomInset
-        core.parentTextLift = private.DEFAULTS.core.parentTextLift
-        core.childTextLift = private.DEFAULTS.core.childTextLift
-        core.parentToggleLift = private.DEFAULTS.core.parentToggleLift
-        core.childToggleLift = private.DEFAULTS.core.childToggleLift
-        core.layoutVersion = private.DEFAULTS.core.layoutVersion
+        local d = ETL.DEFAULTS.core
+        core.parentBarHeight   = d.parentBarHeight
+        core.childBarHeight    = d.childBarHeight
+        core.parentBottomInset = d.parentBottomInset
+        core.childBottomInset  = d.childBottomInset
+        core.parentTextLift    = d.parentTextLift
+        core.childTextLift     = d.childTextLift
+        core.parentToggleLift  = d.parentToggleLift
+        core.childToggleLift   = d.childToggleLift
+        core.layoutVersion     = d.layoutVersion
     end
-
     return core
 end
 
 function ETL:EnsureSettings()
     ETLDB = ETLDB or {}
-    EnsureTable(ETLDB, private.DEFAULTS)
+    DeepDefaults(ETLDB, ETL.DEFAULTS)
     MigrateCoreSettings(ETLDB.core)
     return ETLDB.core
 end
@@ -37,23 +41,19 @@ function ETL:GetSettings()
 end
 
 function ETL:PrintMessage(message)
-    print(private.CHAT_PREFIX .. message)
+    print(ETL.CHAT_PREFIX .. message)
 end
 
 function ETL:ShowWelcomeMessage()
     local settings = self:GetSettings()
-    if settings.showWelcomeMessage == false then
-        return
-    end
-
+    if settings.showWelcomeMessage == false then return end
     self:PrintMessage("Welcome. Use |cffbc6fa8/etl|r to open Traveler's Log or |cffbc6fa8/etl help|r for more commands.")
-    self:PrintMessage("|cffffff00Version:|r |cff8080ff" .. tostring((self.Private and self.Private.VERSION) or "unknown") .. "|r")
+    self:PrintMessage("|cffffff00Version:|r |cff8080ff" .. ETL.VERSION .. "|r")
 end
 
 function ETL:ToggleWelcomeMessage()
     local settings = self:GetSettings()
     settings.showWelcomeMessage = not (settings.showWelcomeMessage == false)
-
     if settings.showWelcomeMessage then
         self:PrintMessage("|cff58be81Welcome message enabled.|r")
     else
@@ -73,8 +73,7 @@ end
 
 function ETL:GetConfiguredBarColor()
     local color = self:GetSettings().barColor or {}
-    local r = tonumber(color.r) or private.BAR_COLOR_R
-    local g = tonumber(color.g) or private.BAR_COLOR_G
-    local b = tonumber(color.b) or private.BAR_COLOR_B
-    return r, g, b
+    return tonumber(color.r) or ETL.BAR_COLOR.r,
+           tonumber(color.g) or ETL.BAR_COLOR.g,
+           tonumber(color.b) or ETL.BAR_COLOR.b
 end

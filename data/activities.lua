@@ -1,4 +1,4 @@
-local private = ETL.Private
+local ADDON_NAMES = { "EnhancedTravelersLog", "Enhanced_Travelers_Log" }
 
 function ETL:GetFrame(frameName)
     return _G[frameName]
@@ -10,14 +10,14 @@ function ETL:GetMonthlyActivitiesFrame()
 end
 
 function ETL:DetectDuplicateInstall()
-    if private.duplicateWarned then
+    if self._duplicateWarned then
         return true
     end
 
     if _G.IsAddOnLoaded then
-        for _, addonName in ipairs(private.DUPLICATE_ADDON_NAMES or {}) do
-            if addonName ~= private.ADDON_NAME and IsAddOnLoaded(addonName) then
-                private.duplicateWarned = true
+        for _, addonName in ipairs(ADDON_NAMES) do
+            if addonName ~= "EnhancedTravelersLog" and IsAddOnLoaded(addonName) then
+                self._duplicateWarned = true
                 self:GetSettings().enabled = false
                 self:PrintMessage("Duplicate ETL install detected (" .. addonName .. "). Progress bars disabled.")
                 return true
