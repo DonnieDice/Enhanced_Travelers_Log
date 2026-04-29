@@ -1,8 +1,8 @@
 ## Interface: 120005
-## Version: 0.1.5
+## Version: 0.1.6
 ## RequiredDeps: RGX-Framework
-## Title: |cff950041E|r|cffffffffnhanced |r|cff950041T|r|cffffffffraveler's |r|cff950041L|r|cffffffffog|r
-## Notes: Adds progress bars and a minimap launcher to the Traveler's Log. |n|r    |cff950041By DonnieDice US-BleedingHollow|r
+## Title: |cffbc6fa8E|r|cffffffffnhanced|r |cffbc6fa8T|r|cffffffffraveler's|r |cffbc6fa8L|r|cffffffffog|r|cffbc6fa8!|r
+## Notes: Adds progress bars and a minimap launcher to the Traveler's Log.|nType |cffbc6fa8/etl|r for options.|n|cff8B1538[RGX]|r |cffbc6fa8By DonnieDice|r
 ## Author: DonnieDice
 ## IconTexture: Interface\AddOns\EnhancedTravelersLog\media\logo
 ## SavedVariables: ETLDB

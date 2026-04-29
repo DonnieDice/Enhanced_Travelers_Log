@@ -6,7 +6,7 @@ ETL.activityCache = ETL.activityCache or {}
 
 local LEGACY_ADDON_NAME = "Enhanced_Travelers_Log"
 
-ETL.VERSION    = "v0.1.5"
+ETL.VERSION    = "v0.1.6"
 ETL.BAR_COLOR  = { r = 0.737, g = 0.435, b = 0.659 }
 ETL.CHAT_PREFIX = "|TInterface\\AddOns\\EnhancedTravelersLog\\media\\logo.tga:16:16:0:0|t - |cffffffff[|r|cffbc6fa8ETL|r|cffffffff]|r "
 
@@ -33,7 +33,7 @@ ETL.DEFAULTS = {
     },
 }
 
-local function OnAddonLoaded(addonName)
+local function OnAddonLoaded(event, addonName)
     if addonName ~= ADDON_NAME and addonName ~= LEGACY_ADDON_NAME and addonName ~= "Blizzard_EncounterJournal" then return end
     ETL:EnsureSettings()
     ETL:DetectDuplicateInstall()

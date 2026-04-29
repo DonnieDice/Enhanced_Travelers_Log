@@ -10,7 +10,43 @@ local function SetMinimapAngle(v)
     if ETLDB then ETLDB.minimapAngle = v end
 end
 
+function ETL:OpenTravelersLog()
+    if InCombatLockdown and InCombatLockdown() then
+        if _G.UIErrorsFrame then
+            UIErrorsFrame:AddMessage("Cannot open Traveler's Log in combat.", 1, 0.2, 0.2)
+        end
+        return
+    end
+
+    if _G.C_PlayerInfo and C_PlayerInfo.IsTravelersLogAvailable and not C_PlayerInfo.IsTravelersLogAvailable() then
+        if _G.UIErrorsFrame then
+            UIErrorsFrame:AddMessage("Traveler's Log is not available right now.", 1, 0.2, 0.2)
+        end
+        return
+    end
+
+    if _G.EncounterJournal_LoadUI    then EncounterJournal_LoadUI()    end
+    if _G.EncounterJournal_OpenJournal then EncounterJournal_OpenJournal() end
+
+    if _G.MonthlyActivitiesFrame_OpenFrame then
+        MonthlyActivitiesFrame_OpenFrame()
+        return
+    end
+
+    local ej = _G.EncounterJournal
+    local tab = ej and (ej.MonthlyActivitiesTab or ej.TravelersLogTab)
+    if tab and tab.Click then tab:Click() end
+end
+
 function ETL:HandleMinimapClick()
+    local ej = _G.EncounterJournal
+    local activities = self:GetMonthlyActivitiesFrame()
+
+    if ej and ej:IsShown() and activities and activities:IsShown() then
+        HideUIPanel(ej)
+        return
+    end
+
     self:OpenTravelersLog()
 end
 
@@ -65,11 +101,10 @@ RGX:OnLogin(function()
         getAngle     = GetMinimapAngle,
         setAngle     = SetMinimapAngle,
         tooltip = {
-            title       = "|TInterface\\AddOns\\EnhancedTravelersLog\\media\\logo.tga:18:18:0:0|t |cff950041Enhanced Traveler's Log|r",
-            description = "|cffd9c6ffProgress bars and quick access for the Traveler's Log.|r",
+            title = "|TInterface\\AddOns\\EnhancedTravelersLog\\media\\logo:18:18:0:0|t |cffbc6fa8E|r|cffffffffnhanced|r |cffbc6fa8T|r|cffffffffraveler's|r |cffbc6fa8L|r|cffffffffog|r|cffbc6fa8!|r",
             lines = {
-                { left = "|cff950041Left-Click|r",       right = "Open Traveler's Log" },
-                { left = "|cff4ecdc4Drag|r",             right = "Move around minimap" },
+                { left = "|cffbc6fa8Left-Click|r",       right = "Open Traveler's Log" },
+                { left = "|cff4ecdc4Left-Drag|r",        right = "Move around minimap" },
                 { left = "|cffe74c3cCtrl+Right-Click|r", right = "Hide minimap icon" },
             },
         },
